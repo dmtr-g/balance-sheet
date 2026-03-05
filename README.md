@@ -12,7 +12,8 @@ Tracks assets, liabilities, and net worth across multiple years (2020–2026) in
 
 ## Demo
 
-./Screenshot.png
+<img width="654" height="1119" alt="Screenshot" src="https://github.com/user-attachments/assets/89f340d9-8638-48f1-b5b4-3df8319ecc55" />
+
 
 > **To run locally:** open `index.html` directly in any browser. No server needed.
 
