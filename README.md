@@ -1,6 +1,6 @@
 # Balance Sheet
 
-An interactive financial balance sheet built with HTML, CSS, and vanilla JavaScript. No frameworks, no build step — just open the file in a browser and it works.
+An interactive financial balance sheet built with HTML, CSS, and vanilla JavaScript. No frameworks, no build step - just open the file in a browser and it works.
 
 ---
 
