@@ -23,9 +23,9 @@ Tracks assets, liabilities, and net worth across multiple years (2020–2026) in
 
 | Layer | Tech |
 |---|---|
-| Structure | HTML5 — semantic tables, `fieldset`, `caption` |
-| Styling | CSS3 — custom properties, flexbox, media queries, keyframe animation |
-| Logic | Vanilla JavaScript — DOM manipulation, Blob API, `window.print()` |
+| Structure | HTML5 - semantic tables, `fieldset`, `caption` |
+| Styling | CSS3 - custom properties, flexbox, media queries, keyframe animation |
+| Logic | Vanilla JavaScript - DOM manipulation, Blob API, `window.print()` |
 | Fonts | Segoe UI / system font stack |
 
 No npm. No dependencies. No build step.
@@ -51,14 +51,14 @@ Or just double-click `index.html` in your file explorer.
 
 ## Features
 
-- **Editable company name** — click the title field and type your own
-- **Year toggle** — checkboxes show/hide any column from 2020 to 2026
-- **Live totals** — assets, liabilities, and net worth recalculate as you type
-- **Currency switcher** — USD, EUR, GBP, JPY, INR
-- **Export to PDF** — triggers the browser's print dialog (works everywhere)
-- **Export to Word** — downloads a `.doc` file with the current table data
-- **Responsive** — horizontal scroll on narrow screens, mobile-friendly controls
-- **Accessible** — screen-reader labels on all visually hidden elements (`sr-only`)
+- **Editable company name** - click the title field and type your own
+- **Year toggle** - checkboxes show/hide any column from 2020 to 2026
+- **Live totals** - assets, liabilities, and net worth recalculate as you type
+- **Currency switcher** - USD, EUR, GBP, JPY, INR
+- **Export to PDF** - triggers the browser's print dialog (works everywhere)
+- **Export to Word** - downloads a `.doc` file with the current table data
+- **Responsive** - horizontal scroll on narrow screens, mobile-friendly controls
+- **Accessible** - screen-reader labels on all visually hidden elements (`sr-only`)
 
 ---
 
@@ -90,7 +90,7 @@ Key things practised:
 
 ## Author
 
-**Dumitru Gafincu** — [github.com/dmtr-g](https://github.com/dmtr-g) — 115009621+dmtr-g@users.noreply.github.com
+**Dumitru Gafincu** - [github.com/dmtr-g](https://github.com/dmtr-g) - 115009621+dmtr-g@users.noreply.github.com
 
 ---
 
