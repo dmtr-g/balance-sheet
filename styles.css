@@ -1,0 +1,318 @@
+span[class~="sr-only"] {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  clip-path: inset(50%) !important;
+  -webkit-clip-path: inset(50%) !important;
+  height: 1px !important;
+  width: 1px !important;
+  position: absolute !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  padding: 0 !important;
+  margin: -1px !important;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-bg: #f5f7fa;
+  --accent: #356eaf;
+  --header-bg: #0a0a23;
+  --header-color: #fff;
+  --row-odd: #ffffff;
+  --row-even: #f0f2f7;
+  --hover-highlight: #e1f0ff;
+  --transition: 0.3s ease;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #0a0a23;
+  background: var(--primary-bg);
+}
+
+h1 {
+  max-width: 37.25rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+}
+
+h1 .flex {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1rem;
+}
+
+h1 .flex span:first-of-type {
+  font-size: 0.7em;
+}
+
+/* company input styling (editable title) */
+#company {
+  font-size: 0.7em;
+  border: 1px solid #356eaf;
+  background: transparent;
+  color: inherit;
+  font-weight: bold;
+  display: inline-block;
+  width: auto;
+  padding: 2px 4px;
+  min-width: 4ch;
+}
+#company:focus {
+  outline: 1px dashed var(--accent);
+}
+h1 .flex span:last-of-type {
+  font-size: 1.2em;
+}
+
+section {
+  max-width: 40rem;
+  margin: 0 auto;
+  border: 2px solid #d0d0d5;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding-bottom: 1rem;
+}
+
+#year-select {
+  margin: 0 1rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#year-select label {
+  cursor: pointer;
+}
+#year-select input {
+  margin-right: 0.25rem;
+}
+#years {
+  display: flex;
+  justify-content: flex-end;
+  position: sticky;
+  top: 0;
+  background: var(--header-bg);
+  color: var(--header-color);
+  z-index: 999;
+  padding: 0.5rem calc(1.25rem + 2px) 0.5rem 0;
+  margin: 0 -2px;
+}
+
+#years span[class] {
+  font-weight: bold;
+  width: 4.5rem;
+  text-align: right;
+}
+
+/* table container: padding + animation + responsive scrolling */
+.table-wrap {
+  padding: 0 0.75rem 1.5rem 0.75rem;
+  animation: fadeIn 1s ease;
+  overflow-x: auto; /* enable horizontal scroll on narrow viewports */
+}
+
+/* basic table reset */
+table {
+  border-collapse: collapse;
+  border: 0;
+  width: 100%;
+  position: relative;
+  margin-top: 3rem;
+}
+
+table caption {
+  color: #356eaf;
+  font-size: 1.3em;
+  font-weight: normal;
+  position: absolute;
+  top: -2.25rem;
+  left: 0.5rem;
+}
+
+tbody td {
+  min-width: 4rem;
+  max-width: 4rem;
+}
+
+tbody th {
+  width: calc(100% - 12rem);
+}
+
+tr[class="total"] {
+  border-bottom: 4px double #0a0a23;
+  font-weight: bold;
+}
+
+tr[class="total"] th {
+  text-align: left;
+  padding: 0.5rem 0 0.25rem 0.5rem;
+}
+
+tr.total td {
+  text-align: right;
+  padding: 0 0.25rem;
+}
+
+tr.total td:nth-of-type(3) {
+  padding-right: 0.5rem;
+}
+
+tr.total:hover {
+  background-color: var(--hover-highlight);
+}
+
+tr.data:hover {
+  background-color: var(--hover-highlight);
+  transition: background-color var(--transition);
+}
+
+td.current {
+  font-style: italic;
+}
+
+/* fade‑in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+tr.data {
+  background-image: linear-gradient(to bottom, #dfdfe2 1.845rem, white 1.845rem);
+}
+
+tr.data th {
+  text-align: left;
+  padding-top: 0.3rem;
+  padding-left: 0.5rem;
+}
+
+tr.data th .description {
+  display: block;
+  font-weight: normal;
+  font-style: italic;
+  padding: 1rem 0 0.75rem;
+  margin-right: -13.5rem;
+}
+
+/* editable value fields */
+input.value,
+input.total-val {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 0.25rem;
+  text-align: right;
+  background: transparent;
+  transition: border-color var(--transition), background var(--transition);
+}
+input.value:focus,
+input.total-val:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+/* hidden helper used by JS */
+.year-col.hidden {
+  display: none;
+}
+
+/* controls styling */
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 1rem 1rem;
+  overflow-x: auto; /* contain horizontal overflow (years) */
+}
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+  body {
+    font-size: 0.9rem;
+  }
+  h1 {
+    padding: 1rem 0.75rem;
+  }
+  #controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    /* remove horizontal margin to avoid pushing past viewport */
+    margin: 0;
+  }
+  #export-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  #year-select {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;       /* prevent wrapping on tiny screens */
+    gap: 0.25rem; /* tighter spacing on mobile */
+    -webkit-overflow-scrolling: touch;
+  }
+  #year-select label {
+    flex: 0 0 auto;
+    font-size: 0.9rem;
+  }
+  #currency-picker {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  #company {
+    /* allow full name, shrink font if necessary */
+    max-width: none;
+    font-size: 0.65em;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  tbody td, tbody th {
+    min-width: 3rem;
+    max-width: 3rem;
+    font-size: 0.85rem;
+  }
+}
+
+#export-buttons button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+#export-buttons button:hover {
+  background: #254a8a;
+}
+
+#currency-picker {
+  font-size: 0.9rem;
+}
+
+#currency-picker select {
+  margin-left: 0.25rem;
+}
+
+
+tr.data td {
+  vertical-align: top;
+  padding: 0.3rem 0.25rem 0;
+  text-align: right;
+}
+
+tr.data td:last-of-type {
+  padding-right: 0.5rem
+}

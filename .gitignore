@@ -1,0 +1,9 @@
+# Ignore editor/temp files
+.DS_Store
+Thumbs.db
+
+# Node modules (if project ever adds JavaScript build tools)
+node_modules/
+
+# IDE files
+.vscode/

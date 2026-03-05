@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Sheet</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main>
+      <section>
+        <!--
+          Balance sheet application
+          - HTML/CSS for layout, styling, and basic responsiveness
+          - Vanilla JS handles:
+              * year column toggling
+              * total calculations (assets, liabilities, net worth)
+              * currency formatting and selection
+              * export to PDF/Word and dynamic company name
+          This file is self-contained; drop it on any web server or open
+          locally. No build step required.
+        -->
+        <h1>
+          <span class="flex">
+            <input id="company" value="DG Services" aria-label="Company name" />
+            <span>Balance Sheet</span>
+          </span>
+        </h1>
+        <!-- configuration controls -->
+        <div id="controls">
+          <div id="export-buttons">
+            <button id="export-pdf">Export as PDF</button>
+            <button id="export-word">Export as Word</button>
+          </div>
+          <fieldset id="year-select">
+            <legend>Years to display</legend>
+            <!-- available range goes from 2020 through 2026 -->
+            <label><input type="checkbox" id="y2020" value="2020" checked>2020</label>
+            <label><input type="checkbox" id="y2021" value="2021" checked>2021</label>
+            <label><input type="checkbox" id="y2022" value="2022" checked>2022</label>
+            <label><input type="checkbox" id="y2023" value="2023">2023</label>
+            <label><input type="checkbox" id="y2024" value="2024">2024</label>
+            <label><input type="checkbox" id="y2025" value="2025">2025</label>
+            <label><input type="checkbox" id="y2026" value="2026">2026</label>
+          </fieldset>
+          <div id="currency-picker">
+            <label for="currency">Currency:</label>
+            <select id="currency">
+              <option value="$" selected>$ - USD</option>
+              <option value="€">€ - EUR</option>
+              <option value="£">£ - GBP</option>
+              <option value="¥">¥ - JPY</option>
+              <option value="₹">₹ - INR</option>
+            </select>
+          </div>
+        </div>
+        <div id="years" aria-hidden="true"></div>
+        <div class="table-wrap">
+          <table>
+            <caption>Assets</caption>
+            <thead>
+              <tr>
+                <td></td>
+                <th class="year-col" data-year="2020"><span class="sr-only">2020</span></th>
+                <th class="year-col" data-year="2021"><span class="sr-only">2021</span></th>
+                <th class="year-col current" data-year="2022"><span class="sr-only">2022</span></th>
+                <th class="year-col" data-year="2023"><span class="sr-only">2023</span></th>
+                <th class="year-col" data-year="2024"><span class="sr-only">2024</span></th>
+                <th class="year-col" data-year="2025"><span class="sr-only">2025</span></th>
+                <th class="year-col" data-year="2026"><span class="sr-only">2026</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="data">
+                <th>Cash <span class="description">This is the cash we currently have on hand.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$25" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$30" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$28" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="data">
+                <th>Checking <span class="description">Our primary transactional account.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$54" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$56" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$53" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="data">
+                <th>Savings <span class="description">Funds set aside for emergencies.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$500" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$650" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$728" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="total" data-type="assets">
+                <th>Total <span class="sr-only">Assets</span></th>
+                <td class="year-col" data-year="2020"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2021"><input type="number" readonly class="total-val"></td>
+                <td class="year-col current" data-year="2022"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2023"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2024"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2025"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2026"><input type="number" readonly class="total-val"></td>
+              </tr>
+            </tbody>
+          </table>
+          <table>
+            <caption>Liabilities</caption>
+            <thead>
+              <tr>
+              <td></td>
+              <th class="year-col" data-year="2020"><span class="sr-only">2020</span></th>
+              <th class="year-col" data-year="2021"><span class="sr-only">2021</span></th>
+              <th class="year-col current" data-year="2022"><span class="sr-only">2022</span></th>
+              <th class="year-col" data-year="2023"><span class="sr-only">2023</span></th>
+              <th class="year-col" data-year="2024"><span class="sr-only">2024</span></th>
+              <th class="year-col" data-year="2025"><span class="sr-only">2025</span></th>
+              <th class="year-col" data-year="2026"><span class="sr-only">2026</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="data">
+                <th>Loans <span class="description">The outstanding balance on our startup loan.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$500" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$250" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$150" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="data">
+                <th>Expenses <span class="description">Annual anticipated expenses, such as payroll.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$200" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$300" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$400" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="data">
+                <th>Credit <span class="description">The outstanding balance on our credit card.</span></th>
+                <td class="year-col" data-year="2020"><input type="number" placeholder="$50" class="value"></td>
+                <td class="year-col" data-year="2021"><input type="number" placeholder="$50" class="value"></td>
+                <td class="year-col current" data-year="2022"><input type="number" placeholder="$75" class="value"></td>
+                <td class="year-col" data-year="2023"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2024"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2025"><input type="number" placeholder="" class="value"></td>
+                <td class="year-col" data-year="2026"><input type="number" placeholder="" class="value"></td>
+              </tr>
+              <tr class="total" data-type="liabilities">
+                <th>Total <span class="sr-only">Liabilities</span></th>
+                <td class="year-col" data-year="2020"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2021"><input type="number" readonly class="total-val"></td>
+                <td class="year-col current" data-year="2022"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2023"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2024"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2025"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2026"><input type="number" readonly class="total-val"></td>
+              </tr>
+            </tbody>
+          </table>
+          <table>
+            <caption>Net Worth</caption>
+            <thead>
+              <tr>
+              <td></td>
+              <th class="year-col" data-year="2020"><span class="sr-only">2020</span></th>
+              <th class="year-col" data-year="2021"><span class="sr-only">2021</span></th>
+              <th class="year-col current" data-year="2022"><span class="sr-only">2022</span></th>
+              <th class="year-col" data-year="2023"><span class="sr-only">2023</span></th>
+              <th class="year-col" data-year="2024"><span class="sr-only">2024</span></th>
+              <th class="year-col" data-year="2025"><span class="sr-only">2025</span></th>
+              <th class="year-col" data-year="2026"><span class="sr-only">2026</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="total" data-type="networth">
+                <th>Total <span class="sr-only">Net Worth</span></th>
+                <td class="year-col" data-year="2020"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2021"><input type="number" readonly class="total-val"></td>
+                <td class="year-col current" data-year="2022"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2023"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2024"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2025"><input type="number" readonly class="total-val"></td>
+                <td class="year-col" data-year="2026"><input type="number" readonly class="total-val"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const years = [2020,2021,2022,2023,2024,2025,2026];
+        let currency = document.getElementById('currency').value;
+        const checkboxes = years.map(y => document.getElementById('y' + y));
+        const yearsDiv = document.getElementById('years');
+
+        function parseNum(str) {
+          if (!str && str !== 0) return 0;
+          const n = parseFloat(str.toString().replace(/[^0-9.-]/g, ''));
+          return isNaN(n) ? 0 : n;
+        }
+
+        function updateYears() {
+          const selected = [];
+          checkboxes.forEach(cb => {
+            if (cb && cb.checked) selected.push(cb.value);
+          });
+          yearsDiv.innerHTML = selected.map(y => `<span class="year">${y}</span>`).join('');
+          document.querySelectorAll('.year-col').forEach(cell => {
+            const y = cell.dataset.year;
+            const cb = document.getElementById('y' + y);
+            if (cb && !cb.checked) cell.classList.add('hidden');
+            else cell.classList.remove('hidden');
+          });
+          recalcTotals();
+        }
+
+        function getTable(txt) {
+          return Array.from(document.querySelectorAll('.table-wrap table')).find(t =>
+            t.querySelector('caption').textContent.trim() === txt
+          );
+        }
+
+        function sumColumn(table, year) {
+          let sum = 0;
+          table.querySelectorAll(`tbody tr.data td.year-col[data-year="${year}"] input`).forEach(inp => {
+            sum += parseNum(inp.value) || parseNum(inp.placeholder);
+          });
+          return sum;
+        }
+
+        function setTotal(table, year, val) {
+          const inp = table.querySelector(`tbody tr.total td.year-col[data-year="${year}"] input`);
+          if (inp) {
+            inp.value = currency + val;
+            inp.placeholder = currency + val;
+          }
+        }
+
+        function recalcTotals() {
+          const assets = getTable('Assets');
+          const liab = getTable('Liabilities');
+          const net = getTable('Net Worth');
+          years.forEach(y => {
+            const str = y.toString();
+            const a = assets ? sumColumn(assets, str) : 0;
+            const l = liab ? sumColumn(liab, str) : 0;
+            if (assets) setTotal(assets, str, a);
+            if (liab) setTotal(liab, str, l);
+            if (net) setTotal(net, str, a - l);
+          });
+        }
+
+        function updateCurrency() {
+          currency = document.getElementById('currency').value;
+          document.querySelectorAll('input.value').forEach(inp => {
+            const num = parseNum(inp.placeholder);
+            inp.placeholder = num ? currency + num : '';
+          });
+          recalcTotals();
+        }
+
+        // listeners
+        document.getElementById('currency').addEventListener('change', updateCurrency);
+        checkboxes.forEach(cb => cb && cb.addEventListener('change', updateYears));
+        document.querySelectorAll('input.value').forEach(inp => {
+          // only recalc when the user types;
+          inp.addEventListener('input', recalcTotals);
+        });
+
+        // initialize
+        updateYears();
+        updateCurrency();
+
+        // setup export buttons
+        document.getElementById('export-pdf').addEventListener('click', () => {
+          window.print();
+        });
+        document.getElementById('export-word').addEventListener('click', () => {
+          const company = document.getElementById('company').value || 'Balance Sheet';
+          const tablesHtml = document.querySelector('.table-wrap').innerHTML;
+          const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${company}</title></head><body><h1>${company} Balance Sheet</h1>${tablesHtml}</body></html>`;
+          const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'balance-sheet.doc';
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+      });
+    </script>
+  </body>
+</html>
